@@ -3,11 +3,23 @@ from watchlist_app.models import Movie
 from watchlist_app.api.serializers import MovieSerializer
 from rest_framework.decorators import api_view
 
-@api_view()
-def watch_list(request):
-  movies=Movie.objects.all()
-  serializer=MovieSerializer(movies, many=True)
-  return Response(serializer.data)
+from rest_framework.views import APIView
+
+# @api_view()
+# def watch_list(request):
+#   movies=Movie.objects.all()
+#   serializer=MovieSerializer(movies, many=True)
+#   return Response(serializer.data)
+
+class MovieLIst(APIView):
+  def get(self, request):
+    movies=Movie.objects.all()
+    serializer=MovieSerializer(movies, many=True)
+    return Response(serializer.data)
+
+
+
+
 
 
 # from django.shortcuts import render
