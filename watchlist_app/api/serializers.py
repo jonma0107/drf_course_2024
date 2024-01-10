@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from watchlist_app.api.validators import title_length
+from watchlist_app.models import Movie
 
 class MovieSerializer(serializers.Serializer):
   id = serializers.IntegerField(read_only=True)
@@ -26,16 +27,16 @@ class MovieSerializer(serializers.Serializer):
 #         model = Movie
 #         fields = '__all__' 
 		
-	# def create(self, validated_data):
-	#     return Movie.objects.create(**validated_data)
+  def create(self, validated_data):
+    return Movie.objects.create(**validated_data)
 		# return super().create(validated_data)     
 
-	# def update(self, instance, validated_data):
-	#     instance.title = validated_data.get('title', instance.title)
-	#     instance.description = validated_data.get('description', instance.description)
-	#     instance.active = validated_data.get('active', instance.active)
-	#     instance.save()
-	#     return instance
+  def update(self, instance, validated_data):
+    instance.title = validated_data.get('title', instance.title)
+    instance.description = validated_data.get('description', instance.description)
+    instance.active = validated_data.get('active', instance.active)
+    instance.save()
+    return instance
 	
 	
 	
