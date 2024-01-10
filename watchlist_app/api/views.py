@@ -19,7 +19,7 @@ class MoviesListAV(APIView):
       serializer.save()
       return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:
-      return Response(serializer.errors)
+      return Response(serializer.errors, status=status.HTTP_406_NOT_ACCEPTABLE)
 
 class MovieDetailAV(APIView):
   def get(self, request, pk):
