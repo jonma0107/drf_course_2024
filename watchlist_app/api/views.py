@@ -4,8 +4,16 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 
-from watchlist_app.models import Movie
-from watchlist_app.api.serializers import MovieSerializer
+from watchlist_app.models import Movie, StreamPlataform
+from watchlist_app.api.serializers import MovieSerializer, StreamPlataformSerializer
+
+class StreamPlataformAV(APIView):
+  def get(self, request):
+    stream=StreamPlataform.objects.all()
+    serializer=StreamPlataformSerializer(stream, many=True)
+    return Response(serializer.data)
+ 
+# todo
 
 class MoviesListAV(APIView):
   def get(self, request):

@@ -3,6 +3,11 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+watchlist_app/__pycache__
+watchlist_app/api/__pycache__
+watchlist_app/migrations/__pycache__
+watchmate/__pycache__
+
 # C extensions
 *.so
 
