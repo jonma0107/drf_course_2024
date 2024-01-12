@@ -12,6 +12,43 @@ class StreamPlataformAV(APIView):
     stream=StreamPlataform.objects.all()
     serializer=StreamPlataformSerializer(stream, many=True)
     return Response(serializer.data)
+  
+  def post(self, request):
+    serializer=StreamPlataformSerializer(data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data, status=status.HTTP_201_CREATED)
+    else:
+      return Response(serializer.errors, status=status.HTTP_406_NOT_ACCEPTABLE)
+    
+class StreamPlataformDetailAV(APIView):
+  def get(self, request, pk):
+    try:
+      stream=StreamPlataform.objects.get(pk=pk)
+      serializer=StreamPlataformSerializer(stream)
+      return Response(serializer.data) 
+    except StreamPlataform.DoesNotExist:
+      return Response ({'error: stream not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+  def put(self, request, pk):
+    try:
+      stream=StreamPlataform.objects.get(pk=pk)
+      serializer=StreamPlataformSerializer(stream, data=request.data)
+      if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+      else:
+        return Response(serializer.errors, status=status.HTTP_406_NOT_ACCEPTABLE)
+    except StreamPlataform.DoesNotExist:
+      return Response ({'error: stream not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+  def delete(self, request, pk):
+    try:
+      stream=StreamPlataform.objects.get(pk=pk)
+      stream.delete()
+      return Response(status=status.HTTP_204_NO_CONTENT)
+    except StreamPlataform.DoesNotExist:
+      return Response ({'error: stream not found'}, status=status.HTTP_404_NOT_FOUND)      
  
 # todo
 
