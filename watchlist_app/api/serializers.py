@@ -20,16 +20,19 @@ from watchlist_app.models import Movie, StreamPlataform
 #           raise serializers.ValidationError('Description must be more than 2 characters')
 #       return value
 
+class MovieSerializer(serializers.ModelSerializer):    
+    class Meta:
+        model = Movie
+        fields = '__all__' 
+
 class StreamPlataformSerializer(serializers.ModelSerializer):
+    movies= MovieSerializer(many=True, read_only=True)
     class Meta:
         model = StreamPlataform
         fields = '__all__'
     
 
-class MovieSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Movie
-        fields = '__all__' 
+
 		
     # def create(self, validated_data):
     #     return Movie.objects.create(**validated_data)

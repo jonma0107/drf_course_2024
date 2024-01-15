@@ -7,6 +7,9 @@ from django.shortcuts import get_object_or_404
 from watchlist_app.models import Movie, StreamPlataform
 from watchlist_app.api.serializers import MovieSerializer, StreamPlataformSerializer
 
+
+# Stream Class
+
 class StreamPlataformAV(APIView):
   def get(self, request):
     stream=StreamPlataform.objects.all()
@@ -50,7 +53,7 @@ class StreamPlataformDetailAV(APIView):
     except StreamPlataform.DoesNotExist:
       return Response ({'error: stream not found'}, status=status.HTTP_404_NOT_FOUND)      
  
-# todo
+# Movies Class
 
 class MoviesListAV(APIView):
   def get(self, request):
