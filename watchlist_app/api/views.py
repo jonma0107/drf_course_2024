@@ -2,10 +2,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework import status
-from django.shortcuts import get_object_or_404
+from rest_framework import generics
+from rest_framework import mixins
 
-from watchlist_app.models import Movie, StreamPlataform
-from watchlist_app.api.serializers import MovieSerializer, StreamPlataformSerializer
+from watchlist_app.models import Movie, StreamPlataform, Review
+from watchlist_app.api.serializers import MovieSerializer, StreamPlataformSerializer, ReviewSerializer
 
 
 # Stream Class
@@ -57,38 +58,6 @@ def stream_plataform_detail(request, pk):
         status=status.HTTP_404_NOT_FOUND)
 
 
-# class StreamPlataformDetailAV(APIView):
-#   def get(self, request, pk):
-#     try:
-#       stream=StreamPlataform.objects.get(pk=pk)
-#       serializer=StreamPlataformSerializer(stream)
-#       return Response(serializer.data)
-#     except StreamPlataform.DoesNotExist:
-# return Response ({'error: stream not found'},
-# status=status.HTTP_404_NOT_FOUND)
-
-#   def put(self, request, pk):
-#     try:
-#       stream=StreamPlataform.objects.get(pk=pk)
-#       serializer=StreamPlataformSerializer(stream, data=request.data)
-#       if serializer.is_valid():
-#         serializer.save()
-#         return Response(serializer.data)
-#       else:
-#         return Response(serializer.errors, status=status.HTTP_406_NOT_ACCEPTABLE)
-#     except StreamPlataform.DoesNotExist:
-# return Response ({'error: stream not found'},
-# status=status.HTTP_404_NOT_FOUND)
-
-#   def delete(self, request, pk):
-#     try:
-#       stream=StreamPlataform.objects.get(pk=pk)
-#       stream.delete()
-#       return Response(status=status.HTTP_204_NO_CONTENT)
-#     except StreamPlataform.DoesNotExist:
-# return Response ({'error: stream not found'},
-# status=status.HTTP_404_NOT_FOUND)
-
 # Movies Class
 
 class MoviesListAV(APIView):
@@ -130,8 +99,8 @@ class MovieDetailAV(APIView):
     #   serializer=MovieSerializer(movie)
     #   return Response(serializer.data)
     # except Movie.DoesNotExist:
-    # return Response ({'error: movie not found'},
-    # status=status.HTTP_404_NOT_FOUND)
+    #   return Response ({'error: movie not found'},
+    #   status=status.HTTP_404_NOT_FOUND)
 
   def put(self, request, pk):
     movie = Movie.objects.get(pk=pk)
@@ -150,47 +119,6 @@ class MovieDetailAV(APIView):
     return Response('registro eliminado', status=status.HTTP_202_ACCEPTED)
 
 
-# @api_view(['GET', 'POST'])
-# def movies_list(request):
-#   if request.method == 'GET':
-#     movies=Movie.objects.all()
-#     serializer=MovieSerializer(movies, many=True)
-#     return Response(serializer.data)
-
-#   elif request.method == 'POST':
-#     serializer=MovieSerializer(data=request.data)
-#     if serializer.is_valid():
-#       serializer.save()
-#       return Response(serializer.data, status=status.HTTP_201_CREATED)
-#     else:
-#       return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-# @api_view(['GET', 'PUT', 'DELETE'])
-# def movie_details(request, pk):
-#   if request.method == 'GET':
-#     try:
-#       movie=Movie.objects.get(pk=pk)
-#       serializer=MovieSerializer(movie)
-#       return Response(serializer.data)
-#     except Movie.DoesNotExist:
-# return Response({'Error': 'movie not found'},
-# status=status.HTTP_404_NOT_FOUND )
-
-#   elif request.method == 'PUT':
-#     movie=Movie.objects.get(pk=pk)
-#     serializer=MovieSerializer(movie, data=request.data)
-#     if serializer.is_valid():
-#       serializer.save()
-#       return Response('registro actualizado', status=status.HTTP_202_ACCEPTED)
-#     else:
-#       return Response(serializer.errors)
-
-#   elif request.method == 'DELETE':
-#     movie=Movie.objects.get(pk=pk)
-#     movie.delete()
-#     return Response('Registro elimininado', status=status.HTTP_202_ACCEPTED)
-
-
 # from django.shortcuts import render
 # from watchlist_app.models import Movie
 # from django.http import JsonResponse
@@ -203,3 +131,37 @@ class MovieDetailAV(APIView):
 #   }
 
 #   return JsonResponse(data)
+
+
+# Review Class
+
+class ReviewList(
+  mixins.ListModelMixin,
+  mixins.CreateModelMixin,
+        generics.GenericAPIView):
+  queryset = Review.objects.all()
+  serializer_class = ReviewSerializer
+
+  def get(self, request, *args, **kwargs):
+    return self.list(request, *args, **kwargs)
+
+  def post(self, request, *args, **kwargs):
+    return self.create(request, *args, **kwargs)
+
+
+class ReviewDetail(
+  mixins.RetrieveModelMixin,
+  mixins.UpdateModelMixin,
+  mixins.DestroyModelMixin,
+        generics.GenericAPIView):
+  queryset = Review.objects.all()
+  serializer_class = ReviewSerializer
+
+  def get(self, request, *args, **kwargs):
+    return self.retrieve(request, *args, **kwargs)
+
+  def put(self, request, *args, **kwargs):
+    return self.update(request, *args, **kwargs)
+
+  def delete(self, request, *args, **kwargs):
+    return self.destroy(request, *args, **kwargs)
