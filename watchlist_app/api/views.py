@@ -152,28 +152,28 @@ class MovieDetailAV(APIView):
 # class ReviewList(generics.ListCreateAPIView):
 #   queryset = Review.objects.all()
 #   serializer_class = ReviewSerializer
-  
+
   # Concrete View Classes
-  
+
 class ReviewList(generics.ListAPIView):
-  serializer_class=ReviewSerializer
+  serializer_class = ReviewSerializer
 
   def get_queryset(self):
-    pk=self.kwargs['pk']
-    return Review.objects.filter(movie=pk) 
-  
-  
+    pk = self.kwargs['pk']
+    return Review.objects.filter(movie=pk)
+
+
 class ReviewCreate(generics.CreateAPIView):
-  serializer_class=ReviewSerializer  
+  serializer_class = ReviewSerializer
 
   def perform_create(self, serializer):
-    pk=self.kwargs.get('pk')
-    movie=Movie.objects.get(pk=pk)
+    pk = self.kwargs.get('pk')
+    movie = Movie.objects.get(pk=pk)
 
     serializer.save(movie=movie)
 
 
-class ReviewDetail(generics.RetrieveUpdateAPIView):
+class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
   serializer_class = ReviewSerializer
   queryset = Review.objects.all()
   lookup_url_kwarg = 'review_pk'
@@ -181,7 +181,7 @@ class ReviewDetail(generics.RetrieveUpdateAPIView):
   def perform_update(self, serializer):
     review_pk = self.kwargs.get('review_pk')
     review_instance = Review.objects.get(pk=review_pk)
-    serializer.save(movie=review_instance.movie)  
+    serializer.save(movie=review_instance.movie)
 
 
 # class ReviewDetail(
@@ -200,6 +200,3 @@ class ReviewDetail(generics.RetrieveUpdateAPIView):
 
 #   def delete(self, request, *args, **kwargs):
 #     return self.destroy(request, *args, **kwargs)
-
-
-
