@@ -4,6 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework import generics
 from rest_framework import mixins
+from rest_framework import viewsets
 
 from watchlist_app.models import Movie, StreamPlataform, Review
 from watchlist_app.api.serializers import (
@@ -12,51 +13,57 @@ from watchlist_app.api.serializers import (
 
 # Stream Class
 
-class StreamPlataformAV(APIView):
-  def get(self, request):
-    stream = StreamPlataform.objects.all()
-    serializer = StreamPlataformSerializer(stream, many=True)
-    return Response(serializer.data)
+# ViewSet class
+class StreamPlatform(viewsets.ModelViewSet):
+  queryset = StreamPlataform.objects.all()
+  serializer_class = StreamPlataformSerializer
+  
 
-  def post(self, request):
-    serializer = StreamPlataformSerializer(data=request.data)
-    if serializer.is_valid():
-      serializer.save()
-      return Response(serializer.data, status=status.HTTP_201_CREATED)
-    else:
-      return Response(
-          serializer.errors,
-          status=status.HTTP_406_NOT_ACCEPTABLE)
+# class StreamPlataformAV(APIView):
+#   def get(self, request):
+#     stream = StreamPlataform.objects.all()
+#     serializer = StreamPlataformSerializer(stream, many=True)
+#     return Response(serializer.data)
+
+#   def post(self, request):
+#     serializer = StreamPlataformSerializer(data=request.data)
+#     if serializer.is_valid():
+#       serializer.save()
+#       return Response(serializer.data, status=status.HTTP_201_CREATED)
+#     else:
+#       return Response(
+#           serializer.errors,
+#           status=status.HTTP_406_NOT_ACCEPTABLE)
 
 
-@api_view(['GET', 'PUT', 'DELETE'])
-def stream_plataform_detail(request, pk):
-  # consulta (queryset)
-  stream = StreamPlataform.objects.filter(id=pk).first()
-  # validación
-  if stream:
-    if request.method == 'GET':
-      serializer = StreamPlataformSerializer(stream)
-      return Response(serializer.data, status=status.HTTP_200_OK)
+# @api_view(['GET', 'PUT', 'DELETE'])
+# def stream_plataform_detail(request, pk):
+#   # consulta (queryset)
+#   stream = StreamPlataform.objects.filter(id=pk).first()
+#   # validación
+#   if stream:
+#     if request.method == 'GET':
+#       serializer = StreamPlataformSerializer(stream)
+#       return Response(serializer.data, status=status.HTTP_200_OK)
 
-    elif request.method == 'PUT':
-      serializer = StreamPlataformSerializer(stream, data=request.data)
-      if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_200_OK)
-      else:
-        return Response(
-            serializer.errors,
-            status=status.HTTP_406_NOT_ACCEPTABLE)
+#     elif request.method == 'PUT':
+#       serializer = StreamPlataformSerializer(stream, data=request.data)
+#       if serializer.is_valid():
+#         serializer.save()
+#         return Response(serializer.data, status=status.HTTP_200_OK)
+#       else:
+#         return Response(
+#             serializer.errors,
+#             status=status.HTTP_406_NOT_ACCEPTABLE)
 
-    elif request.method == 'DELETE':
-      stream.delete()
-      return Response(status=status.HTTP_204_NO_CONTENT)
+#     elif request.method == 'DELETE':
+#       stream.delete()
+#       return Response(status=status.HTTP_204_NO_CONTENT)
 
-  else:
-    return Response(
-        {'error: stream not found'},
-        status=status.HTTP_404_NOT_FOUND)
+#   else:
+#     return Response(
+#         {'error: stream not found'},
+#         status=status.HTTP_404_NOT_FOUND)
 
 
 # Movies Class
