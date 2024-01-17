@@ -172,17 +172,23 @@ class ReviewCreate(generics.CreateAPIView):
 
     serializer.save(movie=movie)
 
-
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
-  serializer_class = ReviewSerializer
-  queryset = Review.objects.all()
-  lookup_url_kwarg = 'review_pk'
+  queryset=Review.objects.all()
+  serializer_class=ReviewSerializer      
 
-  def perform_update(self, serializer):
-    review_pk = self.kwargs.get('review_pk')
-    review_instance = Review.objects.get(pk=review_pk)
-    serializer.save(movie=review_instance.movie)
 
+# class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
+#   serializer_class = ReviewSerializer
+#   queryset = Review.objects.all()
+#   lookup_url_kwarg = 'review_pk'
+
+#   def perform_update(self, serializer):
+#     review_pk = self.kwargs.get('review_pk')
+#     review_instance = Review.objects.get(pk=review_pk)
+#     serializer.save(movie=review_instance.movie)
+      
+
+  # MIXIN'S
 
 # class ReviewDetail(
 #   mixins.RetrieveModelMixin,
