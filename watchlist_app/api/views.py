@@ -6,6 +6,8 @@ from rest_framework import generics
 from rest_framework import mixins
 from rest_framework import viewsets
 
+from rest_framework.exceptions import ValidationError
+
 from watchlist_app.models import Movie, StreamPlataform, Review
 from watchlist_app.api.serializers import (
   MovieSerializer, StreamPlataformSerializer, ReviewSerializer)
@@ -173,11 +175,20 @@ class ReviewList(generics.ListAPIView):
 class ReviewCreate(generics.CreateAPIView):
   serializer_class = ReviewSerializer
 
+  def get_queryset(self):
+        return Review.objects.all()
+
   def perform_create(self, serializer):
     pk = self.kwargs.get('pk')
-    movie = Movie.objects.get(pk=pk)
+    movie = Movie.objects.get(pk=pk)    
 
-    serializer.save(movie=movie)
+    # Validar Usuario
+    reviewer = self.request.user
+    reviewer_queryset = Review.objects.filter(movie=movie, reviewer=reviewer)
+    if reviewer_queryset.exists():
+      raise ValidationError("Tu ya has reseñado esta película") 
+
+    serializer.save(movie=movie, reviewer=reviewer)
 
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
   queryset=Review.objects.all()

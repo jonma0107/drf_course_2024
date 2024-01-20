@@ -1,6 +1,7 @@
 from django.db import models
 # from django.core.validators import MinValueValidator, MaxValueValidator
 from watchlist_app.api.validators import min_max_validator
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -29,6 +30,7 @@ class Movie(models.Model):
 
 
 class Review(models.Model):
+  reviewer = models.ForeignKey(User, on_delete=models.CASCADE)
   rating = models.PositiveIntegerField(validators=[min_max_validator])
   description = models.CharField(max_length=200)
   movie = models.ForeignKey(
