@@ -8,6 +8,10 @@ from rest_framework import viewsets
 
 from rest_framework.exceptions import ValidationError
 
+from rest_framework import permissions
+
+from watchlist_app.api.permissions import AdminOrReadOnly, ReviewUserOrReadOnly
+
 from watchlist_app.models import Movie, StreamPlataform, Review
 from watchlist_app.api.serializers import (
   MovieSerializer, StreamPlataformSerializer, ReviewSerializer)
@@ -19,6 +23,7 @@ from watchlist_app.api.serializers import (
 class StreamPlatform(viewsets.ModelViewSet):
   queryset = StreamPlataform.objects.all()
   serializer_class = StreamPlataformSerializer
+  permission_classes = [permissions.IsAdminUser]
   
 
 # class StreamPlataformAV(APIView):
@@ -69,11 +74,12 @@ class StreamPlatform(viewsets.ModelViewSet):
 
 
 # Movies Class
-
+  
 class MoviesListAV(APIView):
+  permission_classes = [permissions.IsAuthenticated]
   def get(self, request):
     movies = Movie.objects.all()
-    serializer = MovieSerializer(movies, many=True)
+    serializer = MovieSerializer(movies, many=True)    
     return Response(serializer.data)
 
   def post(self, request):
@@ -88,6 +94,8 @@ class MoviesListAV(APIView):
 
 
 class MovieDetailAV(APIView):
+
+  permission_classes = [AdminOrReadOnly]
 
   def get(self, request, pk):
     try:
@@ -165,6 +173,8 @@ class MovieDetailAV(APIView):
   # Concrete View Classes
 
 class ReviewList(generics.ListAPIView):
+
+  permission_classes = [permissions.IsAuthenticated]
   serializer_class = ReviewSerializer
 
   def get_queryset(self):
@@ -191,8 +201,24 @@ class ReviewCreate(generics.CreateAPIView):
     serializer.save(movie=movie, reviewer=reviewer)
 
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
-  queryset=Review.objects.all()
-  serializer_class=ReviewSerializer      
+  permission_classes = [ReviewUserOrReadOnly]
+  serializer_class = ReviewSerializer
+
+  def get_queryset(self):
+        return Review.objects.all()
+  
+  # def perform_update(self, serializer):
+  #    pk=self.kwargs.get('pk')
+  #    review=Review.objects.get(pk=pk)
+     
+  #    reviewer = self.request.user
+  #    reviewer_queryset = Review.objects.filter(reviewer=reviewer)
+  #    if reviewer_queryset.exists():
+      
+  #     # raise ValidationError("Tu ya has reseñado esta película antes") 
+
+  #     serializer.save(review=review, reviewer=reviewer)
+      
 
 
 # class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
