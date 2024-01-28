@@ -7,9 +7,7 @@ from .models import Review
 def update_movie_number_rating(sender, instance, **kwargs):
     movie = instance.movie
     movie.number_rating = models.F('number_rating') - 1
-    # movie.avg_rating = models.F('avg_rating') - instance.rating
-    # movie.avg_rating = instance.rating
-    movie.avg_rating = instance.rating - movie.avg_rating
+    movie.avg_rating = movie.avg_rating-instance.rating
     movie.save()
 
  
