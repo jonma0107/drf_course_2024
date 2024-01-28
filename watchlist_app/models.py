@@ -22,6 +22,8 @@ class Movie(models.Model):
       StreamPlataform,
       on_delete=models.CASCADE,
       related_name="movies")
+  avg_rating=models.FloatField(default=0)
+  number_rating=models.IntegerField(default=0)
   active = models.BooleanField(default=True)
   created = models.DateTimeField(auto_now_add=True)
 

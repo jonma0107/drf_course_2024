@@ -197,6 +197,14 @@ class ReviewCreate(generics.CreateAPIView):
     reviewer_queryset = Review.objects.filter(movie=movie, reviewer=reviewer)
     if reviewer_queryset.exists():
       raise ValidationError("Tu ya has reseñado esta película") 
+    
+    if movie.number_rating == 0:
+      movie.avg_rating = serializer.validated_data['rating']
+    else:
+      movie.avg_rating = (movie.avg_rating + serializer.validated_data['rating']) / 2
+
+    movie.number_rating = movie.number_rating + 1
+    movie.save()
 
     serializer.save(movie=movie, reviewer=reviewer)
 
