@@ -14,3 +14,10 @@ emphasize-lines: 1
 ---
 pip install sphinx
 ```
+
+## Code
+
+```python
+from package import module
+module.call("string")
+```
