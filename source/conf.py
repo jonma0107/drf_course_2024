@@ -6,9 +6,9 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'Meditrack'
-copyright = '2024, TicSocial S.A.S.'
-author = 'TicSocial S.A.S.'
+project = 'TEST-DOCS'
+copyright = '2024, jonathanmeza.com.co'
+author = 'jonathanmeza.com.co'
 release = '0.1'
 
 # -- General configuration ---------------------------------------------------
