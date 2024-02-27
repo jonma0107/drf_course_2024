@@ -15,7 +15,8 @@ release = '0.1'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
-  'myst_parser'
+  'myst_parser',
+  'autoapi.extension',
 ]
 
 templates_path = ['_templates']
@@ -28,3 +29,8 @@ exclude_patterns = []
 
 html_theme = 'furo'
 html_static_path = ['_static']
+
+
+# Configuración específica para AutoAPI
+autoapi_type = 'python'
+autoapi_dirs = ['../watchlist_app']
