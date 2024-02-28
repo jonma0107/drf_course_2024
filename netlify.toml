@@ -1,4 +1,4 @@
 [build]
-  command = "bash ./scripts/build.sh"
+  command = "bash ./build.sh"
   publish = "_build/html"  
 
