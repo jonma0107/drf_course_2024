@@ -1,0 +1,6 @@
+{
+  "private": true,
+  "devDependencies": {
+    "@netlify/plugin-functions": "^3.11.1"
+  }
+}
