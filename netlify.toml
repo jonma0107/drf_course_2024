@@ -1,7 +1,4 @@
 [build]
   command = "bash ./scripts/build.sh"
-  publish = "_build/html"
-  functions = "functions"
+  publish = "_build/html"  
 
-[[plugins]]
-  package = "@netlify/plugin-functions"
