@@ -1,4 +1,4 @@
 furo
 myst-parser
-sphinx==7.2.6
+sphinx
 sphinx-autoapi
